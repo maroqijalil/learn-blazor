@@ -47,15 +47,6 @@
 </div>
 
 @code {
-    [Parameter,EditorRequired]
+    [Parameter, EditorRequired]
     public required Address Address { get; set; }
-
-    @* private ElementReference startName;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender) {
-            await startName.FocusAsync();
-        }
-    } *@
 }

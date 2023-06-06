@@ -1,15 +1,15 @@
 @page "/checkout"
 
 @using BlazingPizza.Services
-@inject OrderState OrderState
-
-@inject HttpClient HttpClient
-@inject NavigationManager NavigationManager
 
 @implements IDisposable
 
+@inject OrderState OrderState
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
 <div class="main">
-    <EditForm EditContext=editContext OnValidSubmit=PlaceOrder> 
+    <EditForm EditContext=editContext OnValidSubmit=PlaceOrder>
         <div class="checkout-cols">
             <div class="checkout-order-details">
                 <h4>Review order</h4>
@@ -18,8 +18,9 @@
 
             <div class="checkout-delivery-address">
                 <h4>Deliver to...</h4>
-                @if (isError) {
-                    <div class="alert alert-danger">Please enter a name and address.</div>
+                @if (isError)
+                {
+                    <div class="alert alert-danger">Please enter a vaild name and address.</div>
                 }
                 <AddressEditor Address="Order.DeliveryAddress" />
             </div>
@@ -36,9 +37,8 @@
 @code {
     Order Order => OrderState.Order;
 
-    bool isError = false;
-
-    private EditContext? editContext;
+    bool isError = true;
+    EditContext? editContext;
 
     protected override void OnInitialized()
     {
@@ -48,20 +48,17 @@
 
     async Task PlaceOrder()
     {
-        var response = await HttpClient.PostAsJsonAsync(NavigationManager.BaseUri + "orders", OrderState.Order);
-        var newOrderId= await response.Content.ReadFromJsonAsync<int>();
+        var response = await HttpClient.PostAsJsonAsync(
+            $"{NavigationManager.BaseUri}orders", OrderState.Order);
+        var newOrderId = await response.Content.ReadFromJsonAsync<int>();
+
         OrderState.ResetOrder();
         NavigationManager.NavigateTo($"myorders/{newOrderId}");
     }
 
-    protected void ShowError()
+    void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
     {
-        isError = true;
-    }
-
-    private void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
-    {
-        isError = !editContext?.Validate() is false;
+        isError = editContext?.Validate() is false;
         StateHasChanged();
     }
 
