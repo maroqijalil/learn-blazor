@@ -1,8 +1,8 @@
 namespace BlazingPizza.Data;
 
-public static class SeedData
+internal static class SeedData
 {
-    public static void Initialize(PizzaStoreContext db)
+    internal static Task InitializeAsync(PizzaStoreContext db)
     {
         var specials = new PizzaSpecial[]
         {
@@ -61,8 +61,17 @@ public static class SeedData
                 BasePrice = 9.99m,
                 ImageUrl = "img/pizzas/margherita.jpg",
             },
+            new()
+            {
+                Id = 9,
+                Name = "Margherita Family Size",
+                Description = "24\" of pure tomatoes and basil",
+                BasePrice = 14.99m,
+                ImageUrl = "img/pizzas/margherita.jpg",
+                FixedSize = 24
+            }
         };
         db.Specials.AddRange(specials);
-        db.SaveChanges();
+        return db.SaveChangesAsync();
     }
 }
