@@ -40,7 +40,7 @@
                       <p>
                           <strong>
                               @(pizza.Size)"
-                              @pizza.Special.Name
+                              @pizza.Special!.Name
                               (£@pizza.GetFormattedTotalPrice())
                           </strong>
                       </p>
@@ -54,7 +54,7 @@
 @code {
     [Parameter] public int OrderId { get; set; }
 
-    OrderWithStatus orderWithStatus;
+    OrderWithStatus? orderWithStatus;
     bool invalidOrder = false;
 
     protected override async Task OnParametersSetAsync()

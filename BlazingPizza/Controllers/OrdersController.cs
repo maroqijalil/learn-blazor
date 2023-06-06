@@ -37,7 +37,7 @@ public class OrdersController : Controller
         // new specials and toppings
         foreach (var pizza in order.Pizzas)
         {
-            pizza.SpecialId = pizza.Special.Id;
+            pizza.SpecialId = pizza.Special!.Id;
             pizza.Special = null;
         }
 

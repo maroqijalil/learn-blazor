@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BlazingPizza
@@ -16,17 +17,17 @@ namespace BlazingPizza
 
         public int OrderId { get; set; }
 
-        public PizzaSpecial Special { get; set; }
+        public PizzaSpecial? Special { get; set; }
 
         public int SpecialId { get; set; }
 
         public int Size { get; set; }
 
-        public List<PizzaTopping> Toppings { get; set; }
+        public List<PizzaTopping> Toppings { get; set; } = default!;
 
         public decimal GetBasePrice()
         {
-            return ((decimal)Size / (decimal)DefaultSize) * Special.BasePrice;
+            return ((decimal)Size / (decimal)DefaultSize) * Special?.BasePrice ?? 1;
         }
 
         public decimal GetTotalPrice()
@@ -39,4 +40,8 @@ namespace BlazingPizza
             return GetTotalPrice().ToString("0.00");
         }
     }
+
+    [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Serialization)]
+    [JsonSerializable(typeof(Pizza))]
+    public partial class PizzaContext : JsonSerializerContext { }
 }

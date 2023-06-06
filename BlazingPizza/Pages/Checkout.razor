@@ -38,7 +38,7 @@
 
     bool isError = false;
 
-    private EditContext editContext;
+    private EditContext? editContext;
 
     protected override void OnInitialized()
     {
@@ -59,14 +59,15 @@
         isError = true;
     }
 
-    private void HandleFieldChanged(object sender, FieldChangedEventArgs e)
+    private void HandleFieldChanged(object? sender, FieldChangedEventArgs e)
     {
-        isError = !editContext.Validate();
+        isError = !editContext?.Validate() is false;
         StateHasChanged();
     }
 
     public void Dispose()
     {
+        if (editContext is null) return;
         editContext.OnFieldChanged -= HandleFieldChanged;
     }
 }
